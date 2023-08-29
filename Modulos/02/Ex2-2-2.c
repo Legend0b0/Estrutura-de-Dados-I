@@ -5,58 +5,60 @@ int *Scanv(int n)
   {
   int *v = (int*)malloc(n*sizeof(int));
 
+  puts("Entre com os valores do vetor");
   for(int i = 0; i < n; i++)
     {
     scanf("%d", &v[i]);
     }
-
+  
   return(v);
   }
 
-void printv(int v[], int n)
+void Printv(int *v, int n)
   {
   for(int i = 0; i < n; i++)
     {
     printf("%d ", v[i]);
     }
   printf("\n");
+
+  return;
   }
 
-void insertion(int v[], int n)
+void SelectionSort(int v[], int n)
   {
-  int ind = v[n-1];
-  for(int i = n-2; ((i >= 0) && (ind < v[i])); i--)
+  for(int i = 0; i < n-1; i++)
     {
-    v[i+1] = v[i];
-    v[i] = ind;
+    int imin = i;
+    for(int j = i+1; j < n; j++)
+      {
+      if(v[imin] > v[j])
+        {
+        imin = j;
+        }
+      }
+    if(imin != i)
+      {
+      int tmp = v[i];
+      v[i] = v[imin];
+      v[imin] = tmp;
+      }
     }
-  }
-
-void insertionsort(int v[], int n)
-  {
-  if(n == 1)
-    {
-    return;
-    }
-  insertionsort(v, n-1);
-  insertion(v, n);
   }
 
 int
 main()
   {
   int n;
-  
+
   puts("Entre com o tamanho do vetor");
   scanf("%d", &n);
 
-  puts("Entre com os valores do vetor");
   int *v = Scanv(n);
+  
+  SelectionSort(v, n);
 
-  insertionsort(v, n); 
-  printv(v, n);
-
-  free(v);
+  Printv(v, n);
 
   return(0);
   }
