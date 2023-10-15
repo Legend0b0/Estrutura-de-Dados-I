@@ -161,7 +161,6 @@ main()
     }
   } while(option != 6);
 
-  pile.v = NULL;
   free(pile.v);
 
   return(0);

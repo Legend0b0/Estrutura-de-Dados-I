@@ -4,8 +4,9 @@
 
 struct Node
 {
+  struct Node *next;
+  struct Node *prev;
   int data;
-  struct Node *next; 
 };
 
 struct List
@@ -36,6 +37,7 @@ struct Node* create_node()
   if(node != NULL)
   {
     node->next = NULL;
+    node->prev = NULL;
     return(node);
   }
   else
@@ -53,11 +55,17 @@ int is_empty(struct List *list)
 
 void insert_begin(struct List *list, int value)
 {
-  struct Node *aux = create_node();
+  struct Node *aux = create_node(); 
 
   aux->data = value;
 
   aux->next = list->head;
+  
+  if(!is_empty(list))
+  {
+    list->head->prev = aux;
+  }
+
   list->head = aux;
 }
 
@@ -65,11 +73,7 @@ void insert_end(struct List *list, int value)
 { 
   if(is_empty(list))
   {
-    list->head = create_node();
-
-    struct Node *aux = list->head;
-    
-    aux->data = value;
+    insert_begin(list, value);
   }
   else
   {
@@ -81,18 +85,63 @@ void insert_end(struct List *list, int value)
 
     aux->next = create_node();
 
+    aux->next->data = value;
+
+    aux->next->prev = aux;
+  }
+}
+
+void insert_mid(struct Node *x, struct Node *y)
+{
+  y->data = value;
+
+  y->next = x;
+
+  y->prev = x->prev;
+
+  x->prev = y;
+}
+
+void insertion_sort(struct List *list)
+{
+  if(!is_empty(list))
+  {
+    struct Node *aux = list->head;
+
+    while(aux->next != NULL)
+    {
+    
+    }
+  }
+}
+
+void insert_ordened(struct List *list, int value)
+{
+  if(!is_empty(list))
+  {
+    struct Node *aux = list->head;
+
+    while((aux->data > value) && (aux->next != NULL))
+    {
+      aux = aux->next;
+    }
+
     if(aux->next != NULL)
-      {
-        aux = aux->next;
+    {
+      struct Node *novo = create_note();
 
-        aux->data = value;
+      novo->data = value;
 
-        aux->next = NULL;
-      }
+      insert_mid(aux, novo);
+    }
     else
     {
-      printf("\nError Malloc\n");
+      insert_end(list, value);
     }
+  }
+  else
+  {
+    insert_begin(list, value);
   }
 }
 
@@ -105,7 +154,7 @@ void print_list(struct List *list)
     printf("\n");
     do
     {
-      printf("%d -> ", aux->data);
+      printf("%d <-> ", aux->data);
       aux = aux->next;
     } while(aux != NULL);
     
@@ -125,6 +174,7 @@ void delete_begin(struct List *list)
     list->head = aux->next;
     memset(aux, 0, sizeof(struct Node));
     free(aux);
+    list->head->prev = NULL;
   }
   else
   {
@@ -140,13 +190,13 @@ void delete_end(struct List *list)
     
     if(aux->next != NULL)
     {
-      while(aux->next->next != NULL)
+      while(aux->next != NULL)
       {
         aux = aux->next;
       }
-      memset(aux->next, 0, sizeof(struct Node));
-      free(aux->next);
-      aux->next = NULL;
+      aux->prev->next = NULL;
+      memset(aux, 0, sizeof(struct Node));
+      free(aux);
     }
     else
     {
@@ -226,6 +276,7 @@ void delete_search(struct List *list)
         memset(aux->next, 0, sizeof(struct Node));
         free(aux->next);
         aux->next = aux2;
+        aux->next->prev = aux;
       }
       else
       {
@@ -262,25 +313,25 @@ void destroy_list(struct List *list)
   if(!is_empty(list))
   {
     destroy_node(list->head);
-    
-    memset(list->head, 0, sizeof(struct Node));
-    free(list->head);
-
-    memset(list, 0, sizeof(struct Node));
-    free(list);
   }
+
+  memset(list->head, 0, sizeof(struct Node));
+  free(list->head);
+
+  memset(list, 0, sizeof(struct Node));
+  free(list);
 }
 
 int
 main()
 {
   struct List *list = create_list();
-/* 
+ 
   int option = 0;
 
   do
   {
-    printf("\n\nEscolha uma acao a fazer com a lista:\n1 - Inserir no comeco\n2 - Inserir no final\n3 - Printar a lista\n4 - Deletar no começo\n5 - Deletar no final\n6 - Deletar por procura\n7 - Procurar valor\n8 - Sair\n\n");
+    printf("\n\nEscolha uma acao a fazer com a lista:\n1 - Inserir ordenado\n2 - Insertion Sort\n3 - Printar a lista\n4 - Deletar no começo\n5 - Deletar no final\n6 - Deletar por procura\n7 - Procurar valor\n8 - Sair\n\n");
     scanf("%d", &option);
 
     switch(option)
@@ -289,20 +340,15 @@ main()
       {
         int value = 0;
 
-        printf("\nEntre com o valor a ser inserido\n");
+        printf("\nEntre com o numero a ser inserido\n");
         scanf("%d", &value);
 
-        insert_begin(list, value);
+        insert_ordened(list, value);
         break;
       }
       case 2:
       {
-        int value = 0;
-
-        printf("\nEntre com o valor a ser inserido\n");
-        scanf("%d", &value);
-
-        insert_end(list, value);
+        insertion_sort(list);
         break;
       }
       case 3:
@@ -341,20 +387,6 @@ main()
       }
     }
   } while(option != 8);  
-*/
-
-  insert_begin(list, 1);
-  insert_begin(list, 2);
-  insert_begin(list, 3);
-  insert_end(list, 4);
-  insert_end(list, 5);
-  insert_end(list, 6);
-        delete_begin(list);
-        delete_begin(list);
-        delete_begin(list);
-        delete_end(list);
-        delete_end(list);
-        delete_end(list);
 
   destroy_list(list);
   

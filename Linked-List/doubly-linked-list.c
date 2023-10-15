@@ -5,7 +5,8 @@
 struct Node
 {
   int data;
-  struct Node *next; 
+  struct Node *next;
+  struct Node *prev;
 };
 
 struct List
@@ -36,6 +37,7 @@ struct Node* create_node()
   if(node != NULL)
   {
     node->next = NULL;
+    node->prev = NULL;
     return(node);
   }
   else
@@ -53,11 +55,17 @@ int is_empty(struct List *list)
 
 void insert_begin(struct List *list, int value)
 {
-  struct Node *aux = create_node();
+  struct Node *aux = create_node(); 
 
   aux->data = value;
 
   aux->next = list->head;
+  
+  if(!is_empty(list))
+  {
+    list->head->prev = aux;
+  }
+  
   list->head = aux;
 }
 
@@ -65,11 +73,7 @@ void insert_end(struct List *list, int value)
 { 
   if(is_empty(list))
   {
-    list->head = create_node();
-
-    struct Node *aux = list->head;
-    
-    aux->data = value;
+    insert_begin(list, value);
   }
   else
   {
@@ -81,18 +85,9 @@ void insert_end(struct List *list, int value)
 
     aux->next = create_node();
 
-    if(aux->next != NULL)
-      {
-        aux = aux->next;
+    aux->next->data = value;
 
-        aux->data = value;
-
-        aux->next = NULL;
-      }
-    else
-    {
-      printf("\nError Malloc\n");
-    }
+    aux->next->prev = aux;
   }
 }
 
@@ -105,7 +100,7 @@ void print_list(struct List *list)
     printf("\n");
     do
     {
-      printf("%d -> ", aux->data);
+      printf("%d <-> ", aux->data);
       aux = aux->next;
     } while(aux != NULL);
     
@@ -125,6 +120,7 @@ void delete_begin(struct List *list)
     list->head = aux->next;
     memset(aux, 0, sizeof(struct Node));
     free(aux);
+    list->head->prev = NULL;
   }
   else
   {
@@ -140,13 +136,13 @@ void delete_end(struct List *list)
     
     if(aux->next != NULL)
     {
-      while(aux->next->next != NULL)
+      while(aux->next != NULL)
       {
         aux = aux->next;
       }
-      memset(aux->next, 0, sizeof(struct Node));
-      free(aux->next);
-      aux->next = NULL;
+      aux->prev->next = NULL;
+      memset(aux, 0, sizeof(struct Node));
+      free(aux);
     }
     else
     {
@@ -226,6 +222,7 @@ void delete_search(struct List *list)
         memset(aux->next, 0, sizeof(struct Node));
         free(aux->next);
         aux->next = aux2;
+        aux->next->prev = aux;
       }
       else
       {
@@ -262,20 +259,20 @@ void destroy_list(struct List *list)
   if(!is_empty(list))
   {
     destroy_node(list->head);
-    
-    memset(list->head, 0, sizeof(struct Node));
-    free(list->head);
-
-    memset(list, 0, sizeof(struct Node));
-    free(list);
   }
+
+  memset(list->head, 0, sizeof(struct Node));
+  free(list->head);
+
+  memset(list, 0, sizeof(struct Node));
+  free(list);
 }
 
 int
 main()
 {
   struct List *list = create_list();
-/* 
+ 
   int option = 0;
 
   do
@@ -341,20 +338,6 @@ main()
       }
     }
   } while(option != 8);  
-*/
-
-  insert_begin(list, 1);
-  insert_begin(list, 2);
-  insert_begin(list, 3);
-  insert_end(list, 4);
-  insert_end(list, 5);
-  insert_end(list, 6);
-        delete_begin(list);
-        delete_begin(list);
-        delete_begin(list);
-        delete_end(list);
-        delete_end(list);
-        delete_end(list);
 
   destroy_list(list);
   
