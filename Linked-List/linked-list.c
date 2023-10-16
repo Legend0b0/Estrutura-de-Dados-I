@@ -275,7 +275,7 @@ int
 main()
 {
   struct List *list = create_list();
-/* 
+
   int option = 0;
 
   do
@@ -341,20 +341,6 @@ main()
       }
     }
   } while(option != 8);  
-*/
-
-  insert_begin(list, 1);
-  insert_begin(list, 2);
-  insert_begin(list, 3);
-  insert_end(list, 4);
-  insert_end(list, 5);
-  insert_end(list, 6);
-        delete_begin(list);
-        delete_begin(list);
-        delete_begin(list);
-        delete_end(list);
-        delete_end(list);
-        delete_end(list);
 
   destroy_list(list);
   
