@@ -13,7 +13,7 @@ int *Scanv(int n)
   return(v);
   }
 
-void printv(int v[], int n)
+void printv(int *v, int n)
   {
   for(int i = 0; i < n; i++)
     {
@@ -22,7 +22,7 @@ void printv(int v[], int n)
   printf("\n");
   }
 
-void insertion(int v[], int n)
+void insertion(int *v, int n)
   {
   int ind = v[n-1];
   for(int i = n-2; ((i >= 0) && (ind < v[i])); i--)
@@ -32,7 +32,7 @@ void insertion(int v[], int n)
     }
   }
 
-void insertionsort(int v[], int n)
+void insertionsort(int *v, int n)
   {
   if(n == 1)
     {

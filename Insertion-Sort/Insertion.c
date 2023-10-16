@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-void printv(int *v, int n)
+void printv(int v[], int n)
   {
   for(int i = 0; i < n; i++)
     {
@@ -9,7 +9,7 @@ void printv(int *v, int n)
   printf("\n");
   }
 
-void insertionsort(int *v, int n)
+void insertionsort(int v[], int n)
   {
   for(int i = 1; i < n; i++)
     {
@@ -25,10 +25,10 @@ void insertionsort(int *v, int n)
 int
 main()
   {
-  int n = 10;
+  int n = 10000;
   int v[n];
 
-  insertionsort(v[], n);
+  insertionsort(v, n);
 
   printv(v, n);
 
