@@ -156,7 +156,11 @@ void delete_begin(struct List *list)
     list->head = aux->next;
     memset(aux, 0, sizeof(struct Node));
     free(aux);
-    list->head->prev = NULL;
+
+    if(!is_empty(list))
+    {
+      list->head->prev = NULL;
+    }
   }
   else
   {
@@ -383,7 +387,7 @@ int
 main()
 {
   struct List *list = create_list();
- /*
+ 
   int option = 0;
 
   do
@@ -444,15 +448,6 @@ main()
       }
     }
   } while(option != 8);  
-*/
-  
-  insert_begin(list, 1);
-  insert_begin(list, 2);
-  insert_begin(list, 3);
-  insert_begin(list, 4);
-  insert_begin(list, 5);
-
-  selection_sort(list);
 
   destroy_list(list);
   
