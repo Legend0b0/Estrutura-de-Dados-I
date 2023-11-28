@@ -79,5 +79,7 @@ int main()
   
   Printv(array, n);
 
+  free(array);
+
   return 0;
 }
