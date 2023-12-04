@@ -184,11 +184,12 @@ void InsertionSort(int *a, int low, int high)
   for(int i = low+1; i <= high; i++)
   {
     int ind = a[i];
-    for(int j = i-1;((j >= 0) && (ind < a[j])); j--)
+    int j = i-1;
+    for(;((j >= low) && (ind < a[j])); j--)
     {
       a[j+1] = a[j];
-      a[j] = ind;
     }
+    a[j] = ind;
   }
 }
 
@@ -219,7 +220,7 @@ int Partition(int *a, int low, int high)
 
 int Randomized_Partition(int *a, int low, int high)
 {
-  int i = ((rand() % (high - low)) + low);
+  int i = ((rand() % (high - low + 1)) + low);
 
   int aux = a[i];
   a[i] = a[high];
